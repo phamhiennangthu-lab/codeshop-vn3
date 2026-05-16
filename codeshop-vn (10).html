@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="vi"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeShop VN — Công cụ tự động hóa Excel &amp; EXE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Be Vietnam Pro',sans-serif;background:#e0e5ec;color:#2d3748;line-height:1.6}
+:root{
+  --brand:#1D9E75;--brand-light:#c8f0e0;--brand-dark:#085041;--brand-mid:#0F6E56;
+  --accent:#185FA5;--accent-light:#d0e4f7;--warn:#BA7517;--warn-light:#f5e0b0;
+  --border:#ccd4de;--bg:#e0e5ec;--text:#2d3748;--muted:#6b7a8d;
+  --radius:16px;--radius-sm:10px;
+  /* Neumorphism shadows - the core */
+  --neu-bg:#e0e5ec;
+  --neu-shadow-light:#ffffff;
+  --neu-shadow-dark:#a3b1c6;
+  --neu-out: 6px 6px 14px #a3b1c6, -6px -6px 14px #ffffff;
+  --neu-out-sm: 4px 4px 10px #a3b1c6, -4px -4px 10px #ffffff;
+  --neu-in: inset 4px 4px 10px #a3b1c6, inset -4px -4px 10px #ffffff;
+  --neu-in-sm: inset 2px 2px 6px #a3b1c6, inset -2px -2px 6px #ffffff;
+  --neu-brand-out: 4px 4px 12px rgba(29,158,117,0.4), -2px -2px 8px rgba(255,255,255,0.8);
+}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:var(--neu-bg);box-shadow:0 4px 16px #a3b1c6,0 -1px 4px #ffffff;padding:14px 40px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:18px;font-weight:700;color:var(--brand-dark);display:flex;align-items:center;gap:8px;text-decoration:none;letter-spacing:-0.3px}
+.logo i{font-size:22px;color:var(--brand)}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{text-decoration:none;font-size:14px;color:var(--muted);transition:color .2s;font-weight:500}
+.nav-links a:hover{color:var(--brand-dark)}
+.nav-right{display:flex;gap:10px}
+.btn{padding:9px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;border:none;letter-spacing:0.2px}
+.btn-outline{background:var(--neu-bg);box-shadow:var(--neu-out-sm);color:var(--text)}
+.btn-outline:hover{box-shadow:var(--neu-in-sm);color:var(--brand)}
+.btn-primary{background:linear-gradient(145deg,#22b886,#179a6a);box-shadow:var(--neu-brand-out);color:#fff}
+.btn-primary:hover{box-shadow:inset 2px 2px 6px rgba(0,0,0,0.2),inset -1px -1px 4px rgba(255,255,255,0.15);transform:translateY(1px)}
+.btn-lg{padding:14px 32px;font-size:15px;border-radius:var(--radius)}
+
+/* HERO */
+.hero{background:var(--neu-bg);padding:80px 40px 60px;text-align:center;box-shadow:inset 0 8px 24px #a3b1c6,inset 0 -4px 12px #ffffff}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;background:var(--neu-bg);box-shadow:var(--neu-out-sm);border-radius:30px;font-size:12px;color:var(--brand-dark);margin-bottom:24px;font-weight:600}
+.hero h1{font-size:44px;font-weight:700;color:var(--brand-dark);line-height:1.2;margin-bottom:16px;letter-spacing:-0.5px}
+.hero h1 span{color:var(--brand)}
+.hero p{font-size:16px;color:var(--muted);max-width:520px;margin:0 auto 36px;line-height:1.7}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.hero-stats{display:flex;gap:48px;justify-content:center;margin-top:52px;padding-top:40px;border-top:none;position:relative}
+.hero-stats::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,#a3b1c6,transparent)}
+.stat-item{text-align:center;padding:16px 24px;background:var(--neu-bg);box-shadow:var(--neu-out);border-radius:var(--radius)}
+.stat-num{font-size:28px;font-weight:700;color:var(--brand-dark)}
+.stat-label{font-size:13px;color:var(--muted);margin-top:2px}
+
+/* TRUST BAR */
+.trust-bar{background:var(--neu-bg);padding:20px 40px;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap;box-shadow:0 2px 12px #a3b1c6}
+.trust-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);padding:10px 18px;background:var(--neu-bg);box-shadow:var(--neu-out-sm);border-radius:30px;font-weight:500}
+.trust-item i{color:var(--brand);font-size:16px}
+
+/* HOW TO BUY */
+.how-to-buy{background:var(--neu-bg)}
+.how-to-buy .section-header{margin-bottom:32px}
+.steps-row{display:flex;gap:0;align-items:stretch;max-width:900px;margin:0 auto;position:relative}
+.steps-row::before{content:'';position:absolute;top:36px;left:calc(10% + 28px);right:calc(10% + 28px);height:2px;background:linear-gradient(90deg,var(--brand),#9FE1CB);z-index:0;opacity:0.5}
+.step-item{flex:1;text-align:center;padding:0 12px;position:relative;z-index:1}
+.step-icon{width:60px;height:60px;border-radius:50%;background:var(--neu-bg);box-shadow:var(--neu-out);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.step-icon i{color:var(--brand);font-size:24px}
+.step-num{position:absolute;top:-4px;right:calc(50% - 38px);width:20px;height:20px;background:linear-gradient(145deg,#22b886,#0F6E56);color:#fff;border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:2px 2px 6px rgba(29,158,117,0.4)}
+.step-title{font-size:14px;font-weight:700;color:var(--brand-dark);margin-bottom:6px}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.buy-contact{margin-top:28px;text-align:center;padding:20px;background:var(--neu-bg);box-shadow:var(--neu-in);border-radius:var(--radius);max-width:600px;margin-left:auto;margin-right:auto}
+.buy-contact p{font-size:14px;color:var(--brand-dark);font-weight:500}
+.buy-contact a{color:var(--brand);font-weight:600;text-decoration:none}
+
+section{padding:56px 40px;background:var(--neu-bg)}
+.section-header{text-align:center;margin-bottom:36px}
+.section-header h2{font-size:28px;font-weight:700;color:var(--brand-dark);margin-bottom:8px;letter-spacing:-0.3px}
+.section-header p{font-size:15px;color:var(--muted)}
+
+/* CATEGORIES */
+.cats{display:flex;gap:14px;max-width:380px;margin:0 auto;justify-content:center}
+.cat-card{padding:10px 22px;border-radius:30px;background:var(--neu-bg);box-shadow:var(--neu-out-sm);text-align:center;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:8px}
+.cat-card:hover{box-shadow:var(--neu-in-sm)}
+.cat-card.active{box-shadow:var(--neu-in);background:var(--neu-bg)}
+.cat-card.active i{color:var(--brand)}
+.cat-card i{font-size:16px;color:var(--muted);transition:color .2s}
+.cat-card span{font-size:13px;color:var(--brand-dark);font-weight:600}
+
+/* PRODUCTS - Two columns by type */
+.products-two-col{display:grid;grid-template-columns:1fr 1fr;gap:28px;max-width:1100px;margin:0 auto}
+.prod-col-wrap{background:var(--neu-bg);box-shadow:var(--neu-out);border-radius:var(--radius);overflow:hidden}
+.prod-col-header{padding:16px 20px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px #a3b1c6}
+.prod-col-header i{font-size:20px}
+.prod-col-header h3{font-size:15px;font-weight:700;color:var(--brand-dark)}
+.col-vba .prod-col-header{background:linear-gradient(135deg,#d4f0e5,#c8ead8)}
+.col-exe .prod-col-header{background:linear-gradient(135deg,#d0e4f7,#c4daf5)}
+.col-vba .prod-col-header i{color:var(--brand)}
+.col-exe .prod-col-header i{color:var(--accent)}
+.prod-list{padding:10px 14px;display:flex;flex-direction:column;gap:0}
+/* LIST ROW style */
+.prod-card{border:none;border-radius:var(--radius-sm);background:var(--neu-bg);overflow:hidden;transition:all .2s;position:relative;display:flex;align-items:center;gap:12px;padding:12px 10px;margin-bottom:6px;box-shadow:var(--neu-out-sm)}
+.prod-card:last-child{margin-bottom:0}
+.prod-card:hover{box-shadow:var(--neu-in-sm)}
+.prod-card:hover .prod-btn-arrow{opacity:1}
+.prod-row-icon{width:38px;height:38px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--neu-in-sm)}
+.prod-row-icon.green{background:var(--neu-bg)}
+.prod-row-icon.blue{background:var(--neu-bg)}
+.prod-row-icon.amber{background:var(--neu-bg)}
+.prod-row-icon i{font-size:18px}
+/* hide old thumb */
+.prod-thumb{display:none}
+.prod-body{padding:0;flex:1;min-width:0;display:flex;align-items:center;gap:10px}
+.prod-body-left{flex:1;min-width:0}
+.prod-type{font-size:10px;font-weight:700;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:3px;letter-spacing:0.3px}
+.type-exe{background:var(--neu-bg);box-shadow:var(--neu-in-sm);color:#0C447C}
+.type-vba{background:var(--neu-bg);box-shadow:var(--neu-in-sm);color:var(--brand-dark)}
+.prod-name{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prod-desc{display:none}
+.prod-footer{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.prod-price{font-size:13px;font-weight:700;color:var(--brand-dark);white-space:nowrap}
+.prod-stars{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--muted)}
+.prod-stars i{color:#EF9F27;font-size:11px}
+.prod-btn{display:none}
+.prod-btn-arrow{font-size:16px;color:var(--brand);opacity:0;transition:opacity .15s;flex-shrink:0;cursor:pointer;padding:4px}
+.del-prod{display:none;position:absolute;right:8px;top:50%;transform:translateY(-50%);width:22px;height:22px;background:#e74c3c;color:#fff;border:none;border-radius:50%;font-size:13px;font-weight:700;cursor:pointer;align-items:center;justify-content:center;z-index:10;line-height:1}
+body.editing .del-prod{display:flex}
+body.editing .prod-btn-arrow{display:none}
+.add-prod{display:none;width:100%;padding:12px;border:none;border-radius:var(--radius-sm);background:var(--neu-bg);box-shadow:var(--neu-in-sm);font-size:13px;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .2s;margin-top:10px}
+.add-prod:hover{color:var(--brand)}
+body.editing .add-prod{display:block}
+
+/* DETAIL */
+.detail-wrap{background:var(--neu-bg);box-shadow:var(--neu-out);border-radius:var(--radius);overflow:hidden;max-width:960px;margin:0 auto}
+.detail-tabs{display:flex;overflow-x:auto;background:var(--neu-bg);box-shadow:0 2px 8px #a3b1c6}
+.detail-tab{padding:13px 22px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.detail-tab.active{color:var(--brand-dark);border-bottom-color:var(--brand);background:var(--neu-bg)}
+.detail-tab:hover{color:var(--brand-dark)}
+.detail-panel{display:none}
+.detail-panel.active{display:block}
+.detail-header{padding:20px 24px;box-shadow:0 1px 6px #a3b1c6;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.detail-header h3{font-size:17px;font-weight:700;color:var(--brand-dark)}
+.detail-header-right{display:flex;align-items:center;gap:14px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr}
+.detail-col{padding:24px}
+.detail-col:first-child{box-shadow:1px 0 0 #c9d2dc}
+.detail-col h4{font-size:14px;font-weight:700;margin-bottom:14px;color:var(--brand-dark);display:flex;align-items:center;gap:8px}
+
+/* VIDEO */
+.video-upload-area{border:none;border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px;background:var(--neu-bg);box-shadow:var(--neu-in)}
+.video-upload-area:hover{box-shadow:var(--neu-in-sm)}
+.video-upload-area i{font-size:36px;color:var(--brand);margin-bottom:8px;display:block}
+.video-upload-area p{font-size:13px;color:var(--muted)}
+.video-upload-area input[type=file]{display:none}
+.video-preview{border-radius:var(--radius-sm);overflow:hidden;margin-bottom:12px;background:#1a2030;position:relative;min-height:150px;display:flex;align-items:center;justify-content:center;box-shadow:var(--neu-in)}
+.video-preview video{width:100%;display:block;max-height:200px}
+.video-preview .remove-video{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.video-placeholder{height:160px;background:var(--neu-bg);box-shadow:var(--neu-in);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;margin-bottom:12px;cursor:pointer;transition:box-shadow .2s}
+.video-placeholder:hover{box-shadow:var(--neu-in-sm)}
+.play-btn{width:56px;height:56px;background:linear-gradient(145deg,#22b886,#179a6a);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:var(--neu-brand-out)}
+.play-btn i{color:#fff;font-size:22px;margin-left:3px}
+.video-list{display:flex;flex-direction:column;gap:8px}
+.video-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);padding:10px 12px;border-radius:var(--radius-sm);background:var(--neu-bg);box-shadow:var(--neu-out-sm);cursor:pointer}
+.video-item i{color:var(--brand)}
+
+/* FEATURES EDITABLE */
+.feature-list{list-style:none;display:flex;flex-direction:column;gap:9px}
+.feature-list li{font-size:14px;color:var(--muted);display:flex;align-items:flex-start;gap:10px;line-height:1.4;padding:8px 12px;background:var(--neu-bg);box-shadow:var(--neu-out-sm);border-radius:var(--radius-sm)}
+.feature-list li i{color:var(--brand);font-size:16px;margin-top:1px;flex-shrink:0}
+.feature-list li .feat-text{flex:1}
+.add-feature-btn{margin-top:10px;padding:9px 16px;background:var(--neu-bg);box-shadow:var(--neu-out-sm);border:none;color:var(--brand-dark);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s;font-weight:600}
+.add-feature-btn:hover{box-shadow:var(--neu-in-sm)}
+.del-feature{display:none;background:none;border:none;color:#ccc;cursor:pointer;font-size:14px;padding:0 2px;flex-shrink:0}
+.del-feature:hover{color:#e74c3c}
+body.editing .del-feature{display:inline}
+
+/* SAMPLE FILE LINKS */
+.sample-files{margin-top:16px}
+.sample-files h5{font-size:13px;font-weight:700;color:var(--brand-dark);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.sample-file-list{display:flex;flex-direction:column;gap:6px}
+.sample-file-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--radius-sm);background:var(--neu-bg);box-shadow:var(--neu-out-sm);font-size:13px;transition:box-shadow .15s;cursor:default}
+.sample-file-item:hover{box-shadow:var(--neu-in-sm)}
+.sample-file-item i{font-size:18px;flex-shrink:0}
+.sample-file-item .sf-name{flex:1;color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sample-file-item .sf-link{font-size:12px;color:var(--brand);text-decoration:none;white-space:nowrap;font-weight:600}
+.sample-file-item .sf-link:hover{text-decoration:underline}
+.add-sample-btn{display:none;margin-top:6px;width:100%;padding:9px;border:none;border-radius:var(--radius-sm);background:var(--neu-bg);box-shadow:var(--neu-in-sm);font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .2s}
+.add-sample-btn:hover{color:var(--brand)}
+body.editing .add-sample-btn{display:block}
+.del-sample{display:none;background:none;border:none;color:#ccc;cursor:pointer;font-size:14px;padding:0;flex-shrink:0;margin-left:4px}
+.del-sample:hover{color:#e74c3c}
+body.editing .del-sample{display:inline}
+/* Hide duplicate upload btn outside videoArea */
+.upload-btn-outside{display:none}
+.pricing-section{background:var(--neu-bg)}
+.pricing-scroll-wrap{position:relative;overflow:hidden;max-width:100%}
+.pricing-scroll{display:flex;gap:20px;overflow-x:auto;padding:20px 40px 28px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.pricing-scroll::-webkit-scrollbar{display:none}
+.plan{border:none;border-radius:var(--radius);padding:26px;background:var(--neu-bg);box-shadow:var(--neu-out);transition:all .3s;flex-shrink:0;width:266px;scroll-snap-align:center;cursor:pointer}
+.plan:hover{transform:translateY(-3px);box-shadow:8px 8px 20px #a3b1c6,-8px -8px 20px #ffffff}
+.plan.featured{box-shadow:6px 6px 18px rgba(29,158,117,0.3),-4px -4px 14px #ffffff}
+.plan.expanded{transform:scale(1.06);box-shadow:10px 10px 28px rgba(29,158,117,0.35),-6px -6px 18px #ffffff;z-index:5;position:relative}
+.plan-icon{margin-bottom:10px}.plan-badge{font-size:11px;font-weight:700;padding:5px 14px;border-radius:12px;background:linear-gradient(145deg,#22b886,#0F6E56);color:#fff;display:inline-block;margin-bottom:10px;box-shadow:var(--neu-brand-out)}
+.plan-name{font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px}
+.plan-price{font-size:30px;font-weight:700;color:var(--brand-dark);margin-bottom:4px}
+.plan-price span{font-size:14px;font-weight:400;color:var(--muted)}
+.plan-desc{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5}
+.plan-divider{border:none;height:1px;background:linear-gradient(90deg,transparent,#a3b1c6,transparent);margin-bottom:16px}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.plan-features li{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.plan-features li i{color:var(--brand);font-size:14px}
+.plan-features li.no i{color:#c0c8d4}
+.plan-features li.no{color:#b0b8c4}
+.plan-btn{width:100%;padding:12px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;border:none}
+.plan-btn.primary{background:linear-gradient(145deg,#22b886,#179a6a);color:#fff;box-shadow:var(--neu-brand-out)}
+.plan-btn.primary:hover{box-shadow:inset 2px 2px 6px rgba(0,0,0,0.2)}
+.plan-btn.outline{background:var(--neu-bg);color:var(--text);box-shadow:var(--neu-out-sm)}
+.plan-btn.outline:hover{box-shadow:var(--neu-in-sm);color:var(--brand)}
+.pricing-hint{text-align:center;font-size:12px;color:var(--muted);margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px}
+.pricing-hint i{font-size:14px}
+
+/* REVIEWS */
+.reviews-section{background:var(--neu-bg)}
+.reviews-summary{padding:28px;background:var(--neu-bg);box-shadow:var(--neu-in);border-radius:var(--radius);max-width:320px;margin:0 auto 32px;text-align:center}
+.big-num{font-size:52px;font-weight:700;color:var(--brand-dark);line-height:1}
+.big-stars{display:flex;gap:3px;justify-content:center;margin:6px 0}
+.big-stars i{color:#EF9F27;font-size:18px}
+.big-label{font-size:13px;color:var(--muted)}
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.review-card{background:var(--neu-bg);box-shadow:var(--neu-out);border-radius:var(--radius);padding:20px;transition:box-shadow .2s}
+.review-card:hover{box-shadow:8px 8px 20px #a3b1c6,-4px -4px 14px #ffffff}
+.review-stars{display:flex;gap:2px;margin-bottom:10px}
+.review-stars i{color:#EF9F27;font-size:15px}
+.review-text{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:14px;font-style:italic}
+.reviewer{display:flex;align-items:center;gap:10px}
+.avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;box-shadow:var(--neu-out-sm)}
+.av-green{background:var(--neu-bg);color:var(--brand-dark)}
+.av-blue{background:var(--neu-bg);color:#0C447C}
+.av-amber{background:var(--neu-bg);color:#633806}
+.av-pink{background:var(--neu-bg);color:#72243E}
+.reviewer-name{font-size:13px;font-weight:700;color:var(--text)}
+.reviewer-role{font-size:12px;color:var(--muted)}
+
+/* CTA & FOOTER */
+.cta-section{background:var(--neu-bg);padding:70px 40px;text-align:center;box-shadow:inset 6px 6px 20px #a3b1c6,inset -6px -6px 20px #ffffff}
+.cta-section h2{font-size:30px;font-weight:700;color:var(--brand-dark);margin-bottom:12px;letter-spacing:-0.3px}
+.cta-section p{font-size:15px;color:var(--muted);margin-bottom:32px;max-width:460px;margin-left:auto;margin-right:auto}
+.btn-white{background:linear-gradient(145deg,#22b886,#179a6a);color:#fff;border:none;font-weight:700;box-shadow:var(--neu-brand-out)}
+.btn-white:hover{box-shadow:inset 2px 2px 8px rgba(0,0,0,0.2),inset -1px -1px 4px rgba(255,255,255,0.1);transform:translateY(1px)}
+footer{background:var(--neu-bg);box-shadow:0 -4px 16px #a3b1c6;padding:32px 40px}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-brand{font-size:16px;font-weight:700;color:var(--brand-dark);display:flex;align-items:center;gap:8px}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;padding:6px 14px;background:var(--neu-bg);box-shadow:var(--neu-out-sm);border-radius:20px;font-weight:500;transition:all .2s}
+.footer-links a:hover{box-shadow:var(--neu-in-sm);color:var(--brand)}
+.footer-copy{font-size:12px;color:var(--muted)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:12px 16px}.nav-links{display:none}
+  .hero{padding:48px 16px 40px}.hero h1{font-size:26px}.hero-stats{gap:20px}
+  section{padding:40px 16px}.trust-bar{padding:14px 16px;gap:16px}
+  .detail-grid{grid-template-columns:1fr}.detail-col:first-child{border-right:none;border-bottom:1px solid var(--border)}
+  footer{padding:24px 16px}.footer-inner{flex-direction:column;align-items:flex-start}
+  .cta-section{padding:48px 16px}.edit-bar{right:12px;bottom:12px;padding:6px 12px}
+  .steps-row{flex-direction:column;gap:20px;align-items:center}.steps-row::before{display:none}
+  .step-item{max-width:260px}
+  .products-two-col{grid-template-columns:1fr}
+  .pricing-scroll{padding:16px 16px 24px}
+  .cats{flex-direction:column;max-width:280px}
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero>*{animation:fadeUp .5s ease both}
+.hero-badge{animation-delay:0s}.hero h1{animation-delay:.1s}.hero p{animation-delay:.2s}
+.hero-btns{animation-delay:.3s}.hero-stats{animation-delay:.4s}
+
+/* EDIT MODE */
+.edit-bar{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;gap:8px;align-items:center;background:var(--neu-bg);box-shadow:var(--neu-out);border-radius:30px;padding:10px 18px;font-family:'Be Vietnam Pro',sans-serif}
+.elabel{font-size:12px;color:var(--muted);font-weight:500}
+.etoggle{padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;box-shadow:var(--neu-out-sm)}
+.etoggle.off{background:var(--neu-bg);color:var(--brand)}
+.etoggle.off:hover{box-shadow:var(--neu-in-sm)}
+.etoggle.on{background:linear-gradient(145deg,#e74c3c,#c0392b);color:#fff;box-shadow:4px 4px 10px rgba(231,76,60,0.4)}
+.esave{padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;background:linear-gradient(145deg,#27ae60,#219a52);color:#fff;display:none;box-shadow:4px 4px 10px rgba(39,174,96,0.4)}
+.ebackup{padding:8px 12px;border-radius:20px;font-size:15px;cursor:pointer;border:none;font-family:inherit;background:var(--neu-bg);box-shadow:var(--neu-out-sm);color:var(--brand-dark);transition:all .2s}
+.ebackup:hover{box-shadow:var(--neu-in-sm)}
+.edit-hint{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:var(--brand-dark);color:#fff;padding:10px 24px;border-radius:20px;font-size:13px;z-index:9999;opacity:0;pointer-events:none;transition:opacity .4s;font-family:'Be Vietnam Pro',sans-serif;white-space:nowrap;box-shadow:0 4px 16px rgba(8,80,65,0.4)}
+.edit-hint.show{opacity:1}
+[contenteditable="true"]{outline:2px dashed var(--brand)!important;outline-offset:3px;border-radius:4px;cursor:text}
+[contenteditable="true"]:focus{outline:2px solid var(--brand)!important;background:rgba(29,158,117,.05)}
+</style>
+</head>
+<body class="">
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo"><i class="ti ti-code"></i> CodeShop VN</a>
+  <ul class="nav-links">
+    <li><a href="#how-to-buy">Cách mua</a></li>
+    <li><a href="#products">Sản phẩm</a></li>
+    <li><a href="#demo">Chi tiết</a></li>
+    <li><a href="#pricing">Bảng giá</a></li>
+    <li><a href="#reviews">Đánh giá</a></li>
+  </ul>
+
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><i class="ti ti-shield-check"></i> Sản phẩm đã kiểm duyệt chất lượng</div>
+  <h1>Công cụ tự động hóa<br><span>Excel &amp; EXE</span> cho dân văn phòng</h1>
+  <p>Tiết kiệm hàng giờ làm việc mỗi ngày. Tải về, chạy ngay — không cần biết lập trình.</p>
+  <div class="hero-btns">
+    <a href="#products"><button class="btn btn-primary btn-lg">Khám phá sản phẩm</button></a>
+    <a href="#how-to-buy"><button class="btn btn-outline btn-lg">Cách mua hàng</button></a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-num">300+</div><div class="stat-label">Khách hàng</div></div>
+    <div class="stat-item"><div class="stat-num">5</div><div class="stat-label">Sản phẩm</div></div>
+    <div class="stat-item"><div class="stat-num">4.9 ★</div><div class="stat-label">Đánh giá TB</div></div>
+    <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Hỗ trợ</div></div>
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><i class="ti ti-download"></i><span>Tải về ngay sau khi mua</span></div>
+  <div class="trust-item"><i class="ti ti-refresh"></i><span>Cập nhật miễn phí</span></div>
+  <div class="trust-item"><i class="ti ti-headset"></i><span>Hỗ trợ tận tâm</span></div>
+  <div class="trust-item"><i class="ti ti-lock"></i><span>Thanh toán an toàn</span></div>
+  <div class="trust-item"><i class="ti ti-rotate-clockwise"></i><span>Hoàn tiền 7 ngày</span></div>
+</div>
+
+<!-- CATEGORIES -->
+<section style="background:var(--neu-bg);padding:24px 40px" id="categories">
+  <div class="section-header">
+    <h2>Danh mục sản phẩm</h2>
+    <p>Chọn loại sản phẩm bạn cần</p>
+  </div>
+  <div class="cats">
+    <div class="cat-card active" onclick="filterProducts('vba',this)">
+      <i class="ti ti-file-spreadsheet"></i><span>Excel VBA</span>
+    </div>
+    <div class="cat-card" onclick="filterProducts('exe',this)">
+      <i class="ti ti-device-desktop"></i><span>File EXE</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS - Two columns -->
+<section id="products" style="background:var(--neu-bg)">
+  <div class="section-header">
+    <h2>Tất cả sản phẩm</h2>
+    <p>Được hàng nghìn người dùng tin chọn</p>
+  </div>
+  <div class="products-two-col">
+    <!-- VBA column -->
+    <div class="prod-col-wrap col-vba">
+      <div class="prod-col-header">
+        <i class="ti ti-file-spreadsheet"></i>
+        <h3>Excel VBA</h3>
+      </div>
+      <div class="prod-list" id="vbaGrid">
+        <div class="prod-card" data-type="vba" data-product="0" onclick="goToDetail(0)" style="cursor:pointer">
+          <button class="del-prod" onclick="event.stopPropagation();delProd(this)">×</button>
+          <div class="prod-row-icon green"><i class="ti ti-file-invoice" style="color:#0F6E56"></i></div>
+          <div class="prod-body">
+            <div class="prod-body-left">
+              <span class="prod-type type-vba">Excel VBA</span>
+              <div class="prod-name">Đọc tờ khai hải quan</div>
+            </div>
+            <div class="prod-footer">
+              <span class="prod-price"><br></span>
+              <span class="prod-stars"><i class="ti ti-star-filled"></i> 4.9</span>
+            </div>
+          </div>
+          <i class="ti ti-chevron-right prod-btn-arrow"></i>
+        </div>
+        <div class="prod-card" data-type="vba" data-product="1" onclick="goToDetail(1)" style="cursor:pointer">
+          <button class="del-prod" onclick="event.stopPropagation();delProd(this)">×</button>
+          <div class="prod-row-icon green"><i class="ti ti-table-options" style="color:#0F6E56"></i></div>
+          <div class="prod-body">
+            <div class="prod-body-left">
+              <span class="prod-type type-vba">Excel VBA</span>
+              <div class="prod-name">Ghép bảng kê trang HĐĐT</div>
+            </div>
+            <div class="prod-footer">
+              <span class="prod-price"><br></span>
+              <span class="prod-stars"><i class="ti ti-star-filled"></i> 5.0</span>
+            </div>
+          </div>
+          <i class="ti ti-chevron-right prod-btn-arrow"></i>
+        </div>
+        <div class="prod-card" data-type="vba" data-product="2" onclick="goToDetail(2)" style="cursor:pointer">
+          <button class="del-prod" onclick="event.stopPropagation();delProd(this)">×</button>
+          <div class="prod-row-icon amber"><i class="ti ti-arrows-diff" style="color:#BA7517"></i></div>
+          <div class="prod-body">
+            <div class="prod-body-left">
+              <span class="prod-type type-vba">Excel VBA</span>
+              <div class="prod-name">Đối chiếu bảng kê đầu ra/vào</div>
+            </div>
+            <div class="prod-footer">
+              <span class="prod-price"><br></span>
+              <span class="prod-stars"><i class="ti ti-star-filled"></i> 4.8</span>
+            </div>
+          </div>
+          <i class="ti ti-chevron-right prod-btn-arrow"></i>
+        </div>
+        <div class="prod-card" data-type="vba" data-product="3" onclick="goToDetail(3)" style="cursor:pointer">
+          <button class="del-prod" onclick="event.stopPropagation();delProd(this)">×</button>
+          <div class="prod-row-icon blue"><i class="ti ti-file-type-xml" style="color:#185FA5"></i></div>
+          <div class="prod-body">
+            <div class="prod-body-left">
+              <span class="prod-type type-vba">Excel VBA</span>
+              <div class="prod-name">Đọc hóa đơn XML (HĐĐT)</div>
+            </div>
+            <div class="prod-footer">
+              <span class="prod-price"><br></span>
+              <span class="prod-stars"><i class="ti ti-star-filled"></i> 4.9</span>
+            </div>
+          </div>
+          <i class="ti ti-chevron-right prod-btn-arrow"></i>
+        </div>
+      </div>
+      <button class="add-prod" onclick="addProd('vba')">+ Thêm sản phẩm Excel VBA</button>
+    </div>
+    <!-- EXE column -->
+    <div class="prod-col-wrap col-exe">
+      <div class="prod-col-header">
+        <i class="ti ti-device-desktop"></i>
+        <h3>File EXE</h3>
+      </div>
+      <div class="prod-list" id="exeGrid">
+        <div class="prod-card" data-type="exe" data-product="4" onclick="goToDetail(4)" style="cursor:pointer">
+          <button class="del-prod" onclick="event.stopPropagation();delProd(this)">×</button>
+          <div class="prod-row-icon amber"><i class="ti ti-files" style="color:#BA7517"></i></div>
+          <div class="prod-body">
+            <div class="prod-body-left">
+              <span class="prod-type type-exe">File EXE</span>
+              <div class="prod-name">Ghép nhiều file PDF thành 1</div>
+            </div>
+            <div class="prod-footer">
+              <span class="prod-price"><br></span>
+              <span class="prod-stars"><i class="ti ti-star-filled"></i> 5.0</span>
+            </div>
+          </div>
+          <i class="ti ti-chevron-right prod-btn-arrow"></i>
+        </div>
+        <div class="prod-card" data-type="exe" data-product="5" onclick="goToDetail(5)" style="cursor:pointer">
+          <button class="del-prod" onclick="event.stopPropagation();delProd(this)">×</button>
+          <div class="prod-row-icon green"><i class="ti ti-code" style="color:#0F6E56"></i></div>
+          <div class="prod-body">
+            <div class="prod-body-left">
+              <span class="prod-type type-exe">File EXE</span>
+              <div class="prod-name">Code theo yêu cầu đặt trước</div>
+            </div>
+            <div class="prod-footer">
+              <span class="prod-price" style="font-size:12px"><br></span>
+              <span class="prod-stars"><i class="ti ti-star-filled"></i> 5.0</span>
+            </div>
+          </div>
+          <i class="ti ti-chevron-right prod-btn-arrow"></i>
+        </div>
+      </div>
+      <button class="add-prod" onclick="addProd('exe')">+ Thêm sản phẩm File EXE</button>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT DETAIL -->
+<section id="demo" style="background:var(--neu-bg)">
+  <div class="section-header">
+    <h2>Chi tiết sản phẩm</h2>
+    <p>Xem video hướng dẫn và tính năng cụ thể trước khi mua</p>
+  </div>
+  <div class="detail-wrap">
+    <div class="detail-tabs" id="detailTabs">
+      <button class="detail-tab" onclick="switchDetail(0,this)">Tờ khai hải quan</button>
+      <button class="detail-tab" onclick="switchDetail(1,this)">Bảng kê HĐĐT</button>
+      <button class="detail-tab" onclick="switchDetail(2,this)">Đối chiếu đầu ra/vào</button>
+      <button class="detail-tab active" onclick="switchDetail(3,this)">Đọc XML</button>
+      <button class="detail-tab" onclick="switchDetail(4,this)">Ghép PDF</button>
+      <button class="detail-tab" onclick="switchDetail(5,this)">Code theo yêu cầu</button>
+    </div>
+
+
+    <!-- Panel 0 -->
+    <div class="detail-panel" id="detail-0">
+      <div class="detail-header">
+        <h3>Đọc tờ khai hải quan — Excel VBA</h3>
+        <div class="detail-header-right">
+          <span class="prod-price">400.000 ₫</span>
+          <button class="btn btn-primary" style="font-size:13px;padding:8px 18px" onclick="alert('Liên hệ Zalo: 0911 316 335 để mua!')">Mua ngay</button>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-col">
+          <h4><i class="ti ti-player-play"></i> Video hướng dẫn</h4>
+          <div id="videoArea-0"><div class="video-preview"><video src="blob:null/f4d4ced0-5929-491f-93be-a6fe3c79c0d5" controls=""></video><button class="remove-video" onclick="removeVideo(0)">×</button></div><input type="file" style="display:none" id="videoInput-0" accept="video/*" onchange="uploadVideo(0,this)"></div>
+          <div style="margin-top:10px">
+            <button class="add-feature-btn" style="width:100%;background:var(--neu-bg);box-shadow:var(--neu-out-sm);border:none;color:var(--accent)" onclick="document.getElementById('videoInput-0').click()">
+              <i class="ti ti-upload" style="font-size:13px"></i> Upload video hướng dẫn
+            </button>
+          </div>
+          <!-- SAMPLE FILES -->
+          <div class="sample-files">
+            <h5><i class="ti ti-paperclip" style="font-size:14px;color:var(--brand)"></i> File kết quả mẫu</h5>
+            <div class="sample-file-list" id="sampleFiles-0">
+              <div class="sample-file-item">
+                <i class="ti ti-file-spreadsheet" style="color:var(--brand)"></i>
+                <span class="sf-name">Xem file mẫu Excel</span>
+                <a href="#" class="sf-link" onclick="return promptSampleLink(this)"><i class="ti ti-link" style="font-size:13px"></i> Gắn link</a>
+                <button class="del-sample" onclick="this.closest('.sample-file-item').remove()">×</button>
+              </div>
+            </div>
+            <button class="add-sample-btn" onclick="addSampleFile(0)">+ Thêm file mẫu</button>
+          </div>
+        </div>
+        <div class="detail-col">
+          <h4><i class="ti ti-list-check"></i> Tính năng chính</h4>
+          <ul class="feature-list" id="features-0">
+            <li><i class="ti ti-check"></i><span class="feat-text">Đọc file tờ khai hải quan tự động</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Trích xuất dữ liệu chính xác</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Xuất ra Excel chuẩn, dễ tra cứu</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Hỗ trợ nhiều loại tờ khai</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Xử lý nhanh, tiết kiệm nhập tay</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+          </ul>
+          <button class="add-feature-btn" onclick="addFeature('features-0')">+ Thêm tính năng</button>
+        </div>
+      </div>
+    </div>
+    <!-- Panel 1 -->
+    <div class="detail-panel" id="detail-1">
+      <div class="detail-header">
+        <h3>Ghép bảng kê trang HĐĐT — Excel VBA</h3>
+        <div class="detail-header-right">
+          <span class="prod-price">150.000 ₫</span>
+          <button class="btn btn-primary" style="font-size:13px;padding:8px 18px" onclick="alert('Liên hệ Zalo: 0911 316 335 để mua!')">Mua ngay</button>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-col">
+          <h4><i class="ti ti-player-play"></i> Video hướng dẫn</h4>
+          <div id="videoArea-1">
+            <div class="video-placeholder" onclick="document.getElementById('videoInput-1').click()">
+              <div class="play-btn"><i class="ti ti-player-play"></i></div>
+            </div>
+            <input type="file" id="videoInput-1" accept="video/*" onchange="uploadVideo(1,this)" style="display:none">
+          </div>
+          <div style="margin-top:10px">
+            <button class="add-feature-btn" style="width:100%;background:var(--neu-bg);box-shadow:var(--neu-out-sm);border:none;color:var(--accent)" onclick="document.getElementById('videoInput-1').click()">
+              <i class="ti ti-upload" style="font-size:13px"></i> Upload video hướng dẫn
+            </button>
+          </div>
+          <!-- SAMPLE FILES -->
+          <div class="sample-files">
+            <h5><i class="ti ti-paperclip" style="font-size:14px;color:var(--brand)"></i> File kết quả mẫu</h5>
+            <div class="sample-file-list" id="sampleFiles-1">
+              <div class="sample-file-item">
+                <i class="ti ti-file-spreadsheet" style="color:var(--brand)"></i>
+                <span class="sf-name">Xem file mẫu Excel</span>
+                <a href="#" class="sf-link" onclick="return promptSampleLink(this)"><i class="ti ti-link" style="font-size:13px"></i> Gắn link</a>
+                <button class="del-sample" onclick="this.closest('.sample-file-item').remove()">×</button>
+              </div>
+            </div>
+            <button class="add-sample-btn" onclick="addSampleFile(1)">+ Thêm file mẫu</button>
+          </div>
+        </div>
+        <div class="detail-col">
+          <h4><i class="ti ti-list-check"></i> Tính năng chính</h4>
+          <ul class="feature-list" id="features-1">
+            <li><i class="ti ti-check"></i><span class="feat-text">Ghép bảng kê nhiều kỳ tự động</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Tổng hợp theo mẫu chuẩn kế toán</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Xuất Excel đầy đủ, rõ ràng</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Xử lý nhanh hàng nghìn dòng dữ liệu</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Không cần cài thêm phần mềm</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+          </ul>
+          <button class="add-feature-btn" onclick="addFeature('features-1')">+ Thêm tính năng</button>
+        </div>
+      </div>
+    </div>
+    <!-- Panel 2 -->
+    <div class="detail-panel" id="detail-2">
+      <div class="detail-header">
+        <h3>Đối chiếu bảng kê đầu ra/vào — Excel VBA</h3>
+        <div class="detail-header-right">
+          <span class="prod-price">100.000 ₫</span>
+          <button class="btn btn-primary" style="font-size:13px;padding:8px 18px" onclick="alert('Liên hệ Zalo: 0911 316 335 để mua!')">Mua ngay</button>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-col">
+          <h4><i class="ti ti-player-play"></i> Video hướng dẫn</h4>
+          <div id="videoArea-2">
+            <div class="video-placeholder" onclick="document.getElementById('videoInput-2').click()">
+              <div class="play-btn"><i class="ti ti-player-play"></i></div>
+            </div>
+            <input type="file" id="videoInput-2" accept="video/*" onchange="uploadVideo(2,this)" style="display:none">
+          </div>
+          <div style="margin-top:10px">
+            <button class="add-feature-btn" style="width:100%;background:var(--neu-bg);box-shadow:var(--neu-out-sm);border:none;color:var(--accent)" onclick="document.getElementById('videoInput-2').click()">
+              <i class="ti ti-upload" style="font-size:13px"></i> Upload video hướng dẫn
+            </button>
+          </div>
+          <!-- SAMPLE FILES -->
+          <div class="sample-files">
+            <h5><i class="ti ti-paperclip" style="font-size:14px;color:var(--brand)"></i> File kết quả mẫu</h5>
+            <div class="sample-file-list" id="sampleFiles-2">
+              <div class="sample-file-item">
+                <i class="ti ti-file-spreadsheet" style="color:var(--brand)"></i>
+                <span class="sf-name">Xem file mẫu Excel</span>
+                <a href="#" class="sf-link" onclick="return promptSampleLink(this)"><i class="ti ti-link" style="font-size:13px"></i> Gắn link</a>
+                <button class="del-sample" onclick="this.closest('.sample-file-item').remove()">×</button>
+              </div>
+            </div>
+            <button class="add-sample-btn" onclick="addSampleFile(2)">+ Thêm file mẫu</button>
+          </div>
+        </div>
+        <div class="detail-col">
+          <h4><i class="ti ti-list-check"></i> Tính năng chính</h4>
+          <ul class="feature-list" id="features-2">
+            <li><i class="ti ti-check"></i><span class="feat-text">Đối chiếu đầu ra &amp; đầu vào tự động</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">So sánh phần mềm kế toán vs trang HĐĐT</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Tô màu dòng chênh lệch tức thì</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Báo cáo sai lệch chi tiết</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Tiết kiệm hàng giờ kiểm tra thủ công</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+          </ul>
+          <button class="add-feature-btn" onclick="addFeature('features-2')">+ Thêm tính năng</button>
+        </div>
+      </div>
+    </div>
+    <!-- Panel 3 -->
+    <div class="detail-panel active" id="detail-3">
+      <div class="detail-header">
+        <h3>Đọc hóa đơn XML (HĐĐT) — Excel VBA</h3>
+        <div class="detail-header-right">
+          <span class="prod-price">150.000 ₫</span>
+          <button class="btn btn-primary" style="font-size:13px;padding:8px 18px" onclick="alert('Liên hệ Zalo: 0911 316 335 để mua!')">Mua ngay</button>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-col">
+          <h4><i class="ti ti-player-play"></i> Video hướng dẫn</h4>
+          <div id="videoArea-3">
+            <div class="video-placeholder" onclick="document.getElementById('videoInput-3').click()">
+              <div class="play-btn"><i class="ti ti-player-play"></i></div>
+            </div>
+            <input type="file" id="videoInput-3" accept="video/*" onchange="uploadVideo(3,this)" style="display:none">
+          </div>
+          <div style="margin-top:10px">
+            <button class="add-feature-btn" style="width:100%;background:var(--neu-bg);box-shadow:var(--neu-out-sm);border:none;color:var(--accent)" onclick="document.getElementById('videoInput-3').click()">
+              <i class="ti ti-upload" style="font-size:13px"></i> Upload video hướng dẫn
+            </button>
+          </div>
+          <!-- SAMPLE FILES -->
+          <div class="sample-files">
+            <h5><i class="ti ti-paperclip" style="font-size:14px;color:var(--brand)"></i> File kết quả mẫu</h5>
+            <div class="sample-file-list" id="sampleFiles-3">
+              <div class="sample-file-item">
+                <i class="ti ti-file-spreadsheet" style="color:var(--brand)"></i>
+                <span class="sf-name">Xem file mẫu Excel</span>
+                <a href="#" class="sf-link" onclick="return promptSampleLink(this)"><i class="ti ti-link" style="font-size:13px"></i> Gắn link</a>
+                <button class="del-sample" onclick="this.closest('.sample-file-item').remove()">×</button>
+              </div>
+            </div>
+            <button class="add-sample-btn" onclick="addSampleFile(3)">+ Thêm file mẫu</button>
+          </div>
+        </div>
+        <div class="detail-col">
+          <h4><i class="ti ti-list-check"></i> Tính năng chính</h4>
+          <ul class="feature-list" id="features-3">
+            <li><i class="ti ti-check"></i><span class="feat-text">Đọc file XML chuẩn hóa đơn điện tử</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Tổng hợp nhiều file XML cùng lúc</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Xuất bảng kê Excel đầy đủ thông tin</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Hỗ trợ mọi nhà cung cấp HĐĐT</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Không cần cài thêm phần mềm</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+          </ul>
+          <button class="add-feature-btn" onclick="addFeature('features-3')">+ Thêm tính năng</button>
+        </div>
+      </div>
+    </div>
+    <!-- Panel 4 -->
+    <div class="detail-panel" id="detail-4">
+      <div class="detail-header">
+        <h3>Ghép nhiều file PDF thành 1 — File EXE</h3>
+        <div class="detail-header-right">
+          <span class="prod-price">50.000 ₫</span>
+          <button class="btn btn-primary" style="font-size:13px;padding:8px 18px" onclick="alert('Liên hệ Zalo: 0911 316 335 để mua!')">Mua ngay</button>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-col">
+          <h4><i class="ti ti-player-play"></i> Video hướng dẫn</h4>
+          <div id="videoArea-4">
+            <div class="video-placeholder" onclick="document.getElementById('videoInput-4').click()">
+              <div class="play-btn"><i class="ti ti-player-play"></i></div>
+            </div>
+            <input type="file" id="videoInput-4" accept="video/*" onchange="uploadVideo(4,this)" style="display:none">
+          </div>
+          <div style="margin-top:10px">
+            <button class="add-feature-btn" style="width:100%;background:var(--neu-bg);box-shadow:var(--neu-out-sm);border:none;color:var(--accent)" onclick="document.getElementById('videoInput-4').click()">
+              <i class="ti ti-upload" style="font-size:13px"></i> Upload video hướng dẫn
+            </button>
+          </div>
+          <!-- SAMPLE FILES -->
+          <div class="sample-files">
+            <h5><i class="ti ti-paperclip" style="font-size:14px;color:var(--brand)"></i> File kết quả mẫu</h5>
+            <div class="sample-file-list" id="sampleFiles-4">
+              <div class="sample-file-item">
+                <i class="ti ti-file-spreadsheet" style="color:var(--brand)"></i>
+                <span class="sf-name">Xem file mẫu Excel</span>
+                <a href="#" class="sf-link" onclick="return promptSampleLink(this)"><i class="ti ti-link" style="font-size:13px"></i> Gắn link</a>
+                <button class="del-sample" onclick="this.closest('.sample-file-item').remove()">×</button>
+              </div>
+            </div>
+            <button class="add-sample-btn" onclick="addSampleFile(4)">+ Thêm file mẫu</button>
+          </div>
+        </div>
+        <div class="detail-col">
+          <h4><i class="ti ti-list-check"></i> Tính năng chính</h4>
+          <ul class="feature-list" id="features-4">
+            <li><i class="ti ti-check"></i><span class="feat-text">Ghép không giới hạn file PDF</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Giữ nguyên chất lượng bản gốc</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Sắp xếp thứ tự tùy ý trước khi ghép</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Chạy offline, bảo mật dữ liệu</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Giao diện kéo thả trực quan</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+          </ul>
+          <button class="add-feature-btn" onclick="addFeature('features-4')">+ Thêm tính năng</button>
+        </div>
+      </div>
+    </div>
+    <!-- Panel 5 -->
+    <div class="detail-panel" id="detail-5">
+      <div class="detail-header">
+        <h3>Code theo yêu cầu đặt trước</h3>
+        <div class="detail-header-right">
+          <span class="prod-price" style="font-size:14px">Theo thỏa thuận</span>
+          <button class="btn btn-primary" style="font-size:13px;padding:8px 18px" onclick="window.open('https://zalo.me/0911316335','_blank')">Liên hệ Zalo</button>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-col">
+          <h4><i class="ti ti-player-play"></i> Video hướng dẫn</h4>
+          <div id="videoArea-5">
+            <div class="video-placeholder" onclick="document.getElementById('videoInput-5').click()">
+              <div class="play-btn"><i class="ti ti-player-play"></i></div>
+            </div>
+            <input type="file" id="videoInput-5" accept="video/*" onchange="uploadVideo(5,this)" style="display:none">
+          </div>
+          <div style="margin-top:10px">
+            <button class="add-feature-btn" style="width:100%;background:var(--neu-bg);box-shadow:var(--neu-out-sm);border:none;color:var(--accent)" onclick="document.getElementById('videoInput-5').click()">
+              <i class="ti ti-upload" style="font-size:13px"></i> Upload video hướng dẫn
+            </button>
+          </div>
+          <!-- SAMPLE FILES -->
+          <div class="sample-files">
+            <h5><i class="ti ti-paperclip" style="font-size:14px;color:var(--brand)"></i> File kết quả mẫu</h5>
+            <div class="sample-file-list" id="sampleFiles-5">
+              <div class="sample-file-item">
+                <i class="ti ti-file-spreadsheet" style="color:var(--brand)"></i>
+                <span class="sf-name">Xem file mẫu Excel</span>
+                <a href="#" class="sf-link" onclick="return promptSampleLink(this)"><i class="ti ti-link" style="font-size:13px"></i> Gắn link</a>
+                <button class="del-sample" onclick="this.closest('.sample-file-item').remove()">×</button>
+              </div>
+            </div>
+            <button class="add-sample-btn" onclick="addSampleFile(5)">+ Thêm file mẫu</button>
+          </div>
+        </div>
+        <div class="detail-col">
+          <h4><i class="ti ti-list-check"></i> Quy trình làm việc</h4>
+          <ul class="feature-list" id="features-5">
+            <li><i class="ti ti-check"></i><span class="feat-text">Tư vấn &amp; phân tích yêu cầu miễn phí</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Thiết kế theo nghiệp vụ thực tế của bạn</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Bàn giao file + mã nguồn đầy đủ</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Hỗ trợ chỉnh sửa sau khi bàn giao</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+            <li><i class="ti ti-check"></i><span class="feat-text">Bảo hành lỗi phát sinh không giới hạn</span><button class="del-feature" onclick="delFeature(this)">×</button></li>
+          </ul>
+          <button class="add-feature-btn" onclick="addFeature('features-5')">+ Thêm tính năng</button>
+        </div>
+      </div>
+    </div>
+
+  
+  </div>
+</section>
+
+<!-- PRICING - Horizontal Scroll -->
+<section id="pricing" class="pricing-section">
+  <div class="section-header">
+    <h2>Bảng giá sản phẩm</h2>
+    <p>Mua 1 lần, dùng mãi mãi — không có phí hằng tháng · Bấm vào sản phẩm để xem nổi bật</p>
+  </div>
+  <div class="pricing-scroll-wrap">
+    <div class="pricing-scroll" id="pricingScroll">
+
+      <!-- 1 -->
+      <div class="plan" onclick="expandPlan(this)">
+        <div class="plan-icon"><i class="ti ti-file-invoice" style="font-size:28px;color:var(--brand)"></i></div>
+        <div class="plan-name">Đọc tờ khai hải quan</div>
+        <div class="plan-price">400.000 <span>₫</span></div>
+        <div class="plan-desc">Tự động đọc &amp; trích xuất dữ liệu từ tờ khai hải quan, tiết kiệm thời gian nhập liệu thủ công</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><i class="ti ti-check"></i> Đọc file tờ khai hải quan</li>
+          <li><i class="ti ti-check"></i> Trích xuất dữ liệu tự động</li>
+          <li><i class="ti ti-check"></i> Xuất ra Excel chuẩn</li>
+          <li><i class="ti ti-check"></i> Hỗ trợ nhiều loại tờ khai</li>
+          <li><i class="ti ti-check"></i> Video hướng dẫn kèm theo</li>
+        </ul>
+        <button class="plan-btn outline" onclick="event.stopPropagation();alert('Liên hệ Zalo: 0911 316 335 để mua!')">Mua ngay</button>
+      </div>
+
+      <!-- 2 -->
+      <div class="plan featured" onclick="expandPlan(this)">
+        <div class="plan-badge">🔥 Bán chạy</div>
+        <div class="plan-icon"><i class="ti ti-table-options" style="font-size:28px;color:var(--brand)"></i></div>
+        <div class="plan-name">Ghép bảng kê trang HĐĐT</div>
+        <div class="plan-price">150.000 <span>₫</span></div>
+        <div class="plan-desc">Tự động ghép &amp; tổng hợp bảng kê từ trang hóa đơn điện tử, không cần copy thủ công</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><i class="ti ti-check"></i> Ghép bảng kê nhiều kỳ</li>
+          <li><i class="ti ti-check"></i> Tổng hợp tự động theo mẫu</li>
+          <li><i class="ti ti-check"></i> Xuất Excel chuẩn kế toán</li>
+          <li><i class="ti ti-check"></i> Xử lý nhanh hàng nghìn dòng</li>
+          <li><i class="ti ti-check"></i> Video hướng dẫn kèm theo</li>
+        </ul>
+        <button class="plan-btn primary" onclick="event.stopPropagation();alert('Liên hệ Zalo: 0911 316 335 để mua!')">Mua ngay</button>
+      </div>
+
+      <!-- 3 -->
+      <div class="plan" onclick="expandPlan(this)">
+        <div class="plan-icon"><i class="ti ti-arrows-diff" style="font-size:28px;color:var(--brand)"></i></div>
+        <div class="plan-name">Đối chiếu bảng kê đầu ra/vào tự động</div>
+        <div class="plan-price">100.000 <span>₫</span></div>
+        <div class="plan-desc">So sánh &amp; đối chiếu bảng kê đầu ra, đầu vào giữa phần mềm kế toán và trang hóa đơn điện tử</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><i class="ti ti-check"></i> Đối chiếu đầu ra &amp; đầu vào</li>
+          <li><i class="ti ti-check"></i> So sánh phần mềm vs trang HĐĐT</li>
+          <li><i class="ti ti-check"></i> Tô màu dòng chênh lệch</li>
+          <li><i class="ti ti-check"></i> Báo cáo sai lệch chi tiết</li>
+          <li><i class="ti ti-check"></i> Video hướng dẫn kèm theo</li>
+        </ul>
+        <button class="plan-btn outline" onclick="event.stopPropagation();alert('Liên hệ Zalo: 0911 316 335 để mua!')">Mua ngay</button>
+      </div>
+
+      <!-- 4 -->
+      <div class="plan" onclick="expandPlan(this)">
+        <div class="plan-icon"><i class="ti ti-file-type-xml" style="font-size:28px;color:var(--accent)"></i></div>
+        <div class="plan-name">Đọc hóa đơn XML</div>
+        <div class="plan-price">150.000 <span>₫</span></div>
+        <div class="plan-desc">Đọc &amp; xử lý file XML hóa đơn điện tử tải từ trang HĐĐT, tổng hợp vào Excel chỉ với vài click</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><i class="ti ti-check"></i> Đọc file XML chuẩn HĐĐT</li>
+          <li><i class="ti ti-check"></i> Tổng hợp nhiều file cùng lúc</li>
+          <li><i class="ti ti-check"></i> Xuất bảng kê Excel đầy đủ</li>
+          <li><i class="ti ti-check"></i> Hỗ trợ mọi nhà cung cấp HĐĐT</li>
+          <li><i class="ti ti-check"></i> Video hướng dẫn kèm theo</li>
+        </ul>
+        <button class="plan-btn outline" onclick="event.stopPropagation();alert('Liên hệ Zalo: 0911 316 335 để mua!')">Mua ngay</button>
+      </div>
+
+      <!-- 5 -->
+      <div class="plan" onclick="expandPlan(this)">
+        <div class="plan-icon"><i class="ti ti-files" style="font-size:28px;color:var(--warn)"></i></div>
+        <div class="plan-name">Ghép nhiều file PDF</div>
+        <div class="plan-price">50.000 <span>₫</span></div>
+        <div class="plan-desc">Gộp nhiều file PDF thành 1 file duy nhất nhanh chóng, không cần phần mềm trả phí</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><i class="ti ti-check"></i> Ghép không giới hạn file PDF</li>
+          <li><i class="ti ti-check"></i> Giữ nguyên chất lượng bản gốc</li>
+          <li><i class="ti ti-check"></i> Sắp xếp thứ tự tùy ý</li>
+          <li><i class="ti ti-check"></i> Chạy offline, bảo mật dữ liệu</li>
+          <li><i class="ti ti-check"></i> Video hướng dẫn kèm theo</li>
+        </ul>
+        <button class="plan-btn outline" onclick="event.stopPropagation();alert('Liên hệ Zalo: 0911 316 335 để mua!')">Mua ngay</button>
+      </div>
+
+      <!-- 6 -->
+      <div class="plan expanded" onclick="expandPlan(this)">
+        <div class="plan-icon"><i class="ti ti-code" style="font-size:28px;color:var(--brand-dark)"></i></div>
+        <div class="plan-name">Combo giảm giá</div>
+        <div class="plan-price" style="font-size:20px;padding-top:4px"><span style="color: rgb(8, 80, 65); font-size: 30px; font-weight: 700;">700.000</span></div>
+        <div class="plan-desc">Bao gồm 5 file tự động hoá trong danh mục sản phẩm. Ưu đãi cho khách hàng mua lần đầu</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><i class="ti ti-check"></i>Đọc tờ khai hải quan</li>
+          <li><i class="ti ti-check"></i>Ghép bảng kê trang HDDT</li>
+          <li><i class="ti ti-check"></i>Đối chiếu bảng kê đầu ra/vào tự động</li>
+          <li><i class="ti ti-check"></i>Đọc hoá đơn XML ra Excel</li>
+          <li><i class="ti ti-check"></i> Ghép nhiều file thành 1 file</li>
+        </ul>
+        <button class="plan-btn outline" onclick="event.stopPropagation();window.open('https://zalo.me/0911316335','_blank')">Liên hệ tư vấn</button>
+      </div>
+
+    </div>
+  </div>
+  <div class="pricing-hint"><i class="ti ti-arrows-left-right"></i> Lướt ngang để xem tất cả sản phẩm · Bấm vào sản phẩm để xem nổi bật</div>
+</section>
+
+<!-- HOW TO BUY (after pricing) -->
+<section id="how-to-buy" class="how-to-buy" style="background:var(--neu-bg)">
+  <div class="section-header">
+    <h2>Cách mua hàng</h2>
+    <p>Chỉ 4 bước đơn giản — nhận file ngay trong ngày</p>
+  </div>
+  <div class="steps-row">
+    <div class="step-item">
+      <div class="step-icon"><i class="ti ti-list-search"></i></div>
+      <div class="step-num">1</div>
+      <div class="step-title">Chọn sản phẩm</div>
+      <div class="step-desc">Xem danh sách, xem video demo và chọn sản phẩm phù hợp với nhu cầu của bạn</div>
+    </div>
+    <div class="step-item">
+      <div class="step-icon"><i class="ti ti-message-circle"></i></div>
+      <div class="step-num">2</div>
+      <div class="step-title"><i class="ti ti-brand-zalo" style="font-size:14px;color:var(--brand);vertical-align:-2px;margin-right:4px"></i>Liên hệ Zalo / Email</div>
+      <div class="step-desc">Nhắn tin Zalo/Email để được tư vấn và xác nhận đơn hàng nhanh nhất</div>
+    </div>
+    <div class="step-item">
+      <div class="step-icon"><i class="ti ti-wallet"></i></div>
+      <div class="step-num">3</div>
+      <div class="step-title">Thanh toán</div>
+      <div class="step-desc">Chuyển khoản ngân hàng hoặc ví điện tử ZaloPay. An toàn, nhanh chóng</div>
+    </div>
+    <div class="step-item">
+      <div class="step-icon"><i class="ti ti-file-download"></i></div>
+      <div class="step-num">4</div>
+      <div class="step-title">Nhận file ngay</div>
+      <div class="step-desc">File sản phẩm được gửi qua Zalo hoặc email ngay sau khi thanh toán thành công</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:14px;max-width:620px;margin:28px auto 0;flex-wrap:wrap">
+    <div style="flex:1;min-width:220px;display:flex;align-items:center;gap:12px;background:var(--neu-bg);border:none;box-shadow:var(--neu-out-sm);border-radius:var(--radius);padding:16px 20px">
+      <i class="ti ti-mail" style="font-size:22px;color:var(--brand);flex-shrink:0"></i>
+      <div>
+        <div style="font-size:11px;color:var(--muted);font-weight:500;margin-bottom:2px">Email</div>
+        <a href="mailto:thuhienpt110@gmail.com" style="font-size:14px;font-weight:600;color:var(--brand-dark);text-decoration:none">thuhienpt110@gmail.com</a>
+      </div>
+    </div>
+    <div style="flex:1;min-width:220px;display:flex;align-items:center;gap:12px;background:var(--neu-bg);border:none;box-shadow:var(--neu-out-sm);border-radius:var(--radius);padding:16px 20px">
+      <i class="ti ti-phone" style="font-size:22px;color:var(--brand);flex-shrink:0"></i>
+      <div>
+        <div style="font-size:11px;color:var(--muted);font-weight:500;margin-bottom:2px">Số điện thoại</div>
+        <a href="tel:0911316335" style="font-size:14px;font-weight:600;color:var(--brand-dark);text-decoration:none">0911 316 335</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews" class="reviews-section">
+  <div class="section-header">
+    <h2>Khách hàng nói gì?</h2>
+    <p>Hơn 300 khách hàng đã tin dùng sản phẩm</p>
+  </div>
+  <div class="reviews-summary">
+    <div class="big-num">4.9</div>
+    <div class="big-stars"><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i></div>
+    <div class="big-label">Dựa trên 273 đánh giá</div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-stars"><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i></div>
+      <div class="review-text">"File đối chiếu tiết kiệm cho tôi 2 tiếng mỗi ngày. Dùng được ngay, không cần hỏi thêm gì cả."</div>
+      <div class="reviewer"><div class="avatar av-green">TH</div><div><div class="reviewer-name">Trần Hương</div><div class="reviewer-role">Quản lý kho, TP.HCM</div></div></div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars"><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i></div>
+      <div class="review-text">"Tool trích xuất tờ khai cực kỳ dễ dùng. Hơn 200 tờ khai, đọc chính xác 100%, tiết kiệm cả mấy ngày cho mình."</div>
+      <div class="reviewer"><div class="avatar av-blue">NM</div><div><div class="reviewer-name">Nguyễn Minh</div><div class="reviewer-role">HR Manager, Hà Nội</div></div></div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars"><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star"></i></div>
+      <div class="review-text">"Video hướng dẫn rất chi tiết, mua xong tự cài được ngay. Shop hỗ trợ phản hồi siêu nhanh qua Zalo."</div>
+      <div class="reviewer"><div class="avatar av-amber">LT</div><div><div class="reviewer-name">Lê Thanh</div><div class="reviewer-role">Chủ tiệm, Đà Nẵng</div></div></div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars"><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i></div>
+      <div class="review-text">"Mua gói Giảm giá rất đáng tiền. Mong chờ shop ra sản phẩm mới trong thời gian tới. Hẹ hẹ"</div>
+      <div class="reviewer"><div class="avatar av-pink">PL</div><div><div class="reviewer-name">Phạm Linh</div><div class="reviewer-role">Kế toán, Hải Phòng</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Sẵn sàng tiết kiệm thời gian?</h2>
+  <p>Tham gia cùng hơn 300 khách hàng đang tự động hóa công việc mỗi ngày.</p>
+  <a href="#products"><button class="btn btn-white btn-lg">Xem tất cả sản phẩm</button></a>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><i class="ti ti-code" style="color:var(--brand)"></i> CodeShop VN</div>
+    <div class="footer-links">
+      <a href="#how-to-buy">Cách mua</a>
+      <a href="#products">Sản phẩm</a>
+      <a href="#pricing">Bảng giá</a>
+      <a href="https://zalo.me/0911316335">Zalo: 0911 316 335</a>
+    </div>
+    <div class="footer-copy">© 2025 CodeShop VN · Tác giả: Phạm Thị Thu Hiền</div>
+  </div>
+</footer>
+
+<!-- FLOATING EDIT BAR (owner only) -->
+<div class="edit-bar" id="editBar" style="display: none;">
+  <span class="elabel" id="elabel">Đang chỉnh sửa</span>
+  <button class="etoggle on" id="etoggle" onclick="toggleEdit()">🔒 Tắt chỉnh sửa</button>
+  <button class="esave" id="esave" onclick="savePage()" style="display: block;">💾 Lưu &amp; Tải xuống</button>
+  <button class="ebackup" id="ebackup" onclick="toggleBackupPanel()" title="Backup &amp; Restore">🗂</button>
+</div>
+<div class="edit-hint" id="editHint" style="display: none;">✏️ Click vào bất kỳ chữ nào để sửa trực tiếp</div>
+
+<!-- BACKUP PANEL -->
+<div id="backupPanel" style="display: none; position: fixed; bottom: 70px; right: 20px; z-index: 9998; width: 320px; background: var(--neu-bg); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: var(--radius); box-shadow: var(--neu-out); font-family: &quot;Be Vietnam Pro&quot;, sans-serif; overflow: hidden;">
+  <div style="padding:14px 16px;box-shadow:0 1px 6px #a3b1c6;display:flex;align-items:center;justify-content:space-between">
+    <span style="font-size:14px;font-weight:600;color:var(--brand-dark)">🗂 Backup &amp; Restore</span>
+    <button onclick="toggleBackupPanel()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;padding:0">×</button>
+  </div>
+  <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+    <button onclick="createBackup()" style="width:100%;padding:9px;background:linear-gradient(145deg,#22b886,#179a6a);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;box-shadow:var(--neu-brand-out);cursor:pointer;font-family:inherit">💾 Tạo backup ngay</button>
+  </div>
+  <div id="backupList" style="max-height:260px;overflow-y:auto;padding:8px 0">
+    <div style="padding: 20px; text-align: center; font-size: 13px; color: var(--muted); display: none;" id="backupEmpty">Chưa có backup nào</div>
+  <div class="bk-item" style="display: flex; align-items: center; gap: 8px; padding: 9px 16px; border-bottom: 1px solid var(--border); font-size: 13px;"><span style="flex:1;color:var(--text)"><span style="font-size:10px;background:var(--brand-light);color:var(--brand-dark);padding:1px 7px;border-radius:8px;font-weight:600;margin-right:6px">Mới nhất</span>17/5/2026 04:06</span><button onclick="restoreBackup(1778965596243)" style="padding:4px 10px;background:var(--accent-light);color:#0C447C;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">Khôi phục</button><button onclick="downloadBackup(1778965596243)" style="padding:4px 8px;background:var(--brand-light);color:var(--brand-dark);border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit" title="Tải xuống">⬇</button><button onclick="deleteBackup(1778965596243)" style="padding:4px 8px;background:#fef2f2;color:#e74c3c;border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit" title="Xoá">✕</button></div><div class="bk-item" style="display: flex; align-items: center; gap: 8px; padding: 9px 16px; border-bottom: 1px solid var(--border); font-size: 13px;"><span style="flex:1;color:var(--text)">17/5/2026 03:59</span><button onclick="restoreBackup(1778965187217)" style="padding:4px 10px;background:var(--accent-light);color:#0C447C;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">Khôi phục</button><button onclick="downloadBackup(1778965187217)" style="padding:4px 8px;background:var(--brand-light);color:var(--brand-dark);border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit" title="Tải xuống">⬇</button><button onclick="deleteBackup(1778965187217)" style="padding:4px 8px;background:#fef2f2;color:#e74c3c;border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit" title="Xoá">✕</button></div><div class="bk-item" style="display: flex; align-items: center; gap: 8px; padding: 9px 16px; border-bottom: 1px solid var(--border); font-size: 13px;"><span style="flex:1;color:var(--text)">17/5/2026 03:57</span><button onclick="restoreBackup(1778965070495)" style="padding:4px 10px;background:var(--accent-light);color:#0C447C;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">Khôi phục</button><button onclick="downloadBackup(1778965070495)" style="padding:4px 8px;background:var(--brand-light);color:var(--brand-dark);border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit" title="Tải xuống">⬇</button><button onclick="deleteBackup(1778965070495)" style="padding:4px 8px;background:#fef2f2;color:#e74c3c;border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit" title="Xoá">✕</button></div><div class="bk-item" style="display: flex; align-items: center; gap: 8px; padding: 9px 16px; border-bottom: 1px solid var(--border); font-size: 13px;"><span style="flex:1;color:var(--text)">17/5/2026 03:50</span><button onclick="restoreBackup(1778964647669)" style="padding:4px 10px;background:var(--accent-light);color:#0C447C;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">Khôi phục</button><button onclick="downloadBackup(1778964647669)" style="padding:4px 8px;background:var(--brand-light);color:var(--brand-dark);border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit" title="Tải xuống">⬇</button><button onclick="deleteBackup(1778964647669)" style="padding:4px 8px;background:#fef2f2;color:#e74c3c;border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit" title="Xoá">✕</button></div><div class="bk-item" style="display: flex; align-items: center; gap: 8px; padding: 9px 16px; border-bottom: 1px solid var(--border); font-size: 13px;"><span style="flex:1;color:var(--text)">17/5/2026 03:50</span><button onclick="restoreBackup(1778964638404)" style="padding:4px 10px;background:var(--accent-light);color:#0C447C;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">Khôi phục</button><button onclick="downloadBackup(1778964638404)" style="padding:4px 8px;background:var(--brand-light);color:var(--brand-dark);border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit" title="Tải xuống">⬇</button><button onclick="deleteBackup(1778964638404)" style="padding:4px 8px;background:#fef2f2;color:#e74c3c;border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit" title="Xoá">✕</button></div></div>
+</div>
+
+<!-- OWNER LOGIN (silent - double-click logo) -->
+<div id="ownerModal" style="display: none; position: fixed; inset: 0px; background: rgba(0, 0, 0, 0); z-index: 99998; align-items: center; justify-content: center;" onclick="if(event.target===this)closeOwnerModal()">
+  <div style="background:var(--neu-bg);border-radius:var(--radius);padding:20px;width:200px;box-shadow:var(--neu-out)">
+    <input type="password" id="ownerPwd" style="width: 100%; padding: 10px 14px; border-width: medium; border-style: none; border-image: initial; border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; outline: none; letter-spacing: 2px; background: var(--neu-bg); box-shadow: var(--neu-in-sm);" onkeydown="if(event.key==='Enter')checkOwner();if(event.key==='Escape')closeOwnerModal()" autocomplete="off">
+  </div>
+</div>
+
+<script>
+// ── OWNER AUTH ──
+// Mật khẩu chủ sở hữu (đổi tại đây)
+var OWNER_PWD = '&029!#4!#-$5090';
+var isOwner = false;
+
+// Kích hoạt: double-click vào logo
+document.querySelector('.logo').addEventListener('dblclick', function(){
+  if(isOwner) return; // đã xác thực rồi
+  var m = document.getElementById('ownerModal');
+  m.style.display = 'flex';
+  setTimeout(function(){ document.getElementById('ownerPwd').focus(); }, 100);
+});
+
+function checkOwner(){
+  var pwd = document.getElementById('ownerPwd').value;
+  if(pwd === OWNER_PWD){
+    isOwner = true;
+    document.getElementById('ownerModal').style.display = 'none';
+    document.getElementById('ownerPwd').value = '';
+    document.getElementById('editBar').style.display = 'flex';
+  } else {
+    document.getElementById('ownerPwd').value = '';
+    document.getElementById('ownerPwd').style.borderColor='#e74c3c';
+    setTimeout(function(){document.getElementById('ownerPwd').style.borderColor='';},600);
+  }
+}
+
+function closeOwnerModal(){
+  document.getElementById('ownerModal').style.display = 'none';
+  document.getElementById('ownerPwd').value = '';
+}
+
+// ── SAMPLE FILES ──
+var sfIconMap = {
+  'xlsx': 'ti-file-spreadsheet', 'xls': 'ti-file-spreadsheet',
+  'pdf': 'ti-file-type-pdf', 'doc': 'ti-file-word', 'docx': 'ti-file-word',
+  'csv': 'ti-file-spreadsheet', 'zip': 'ti-file-zip', 'rar': 'ti-file-zip'
+};
+var sfColorMap = {
+  'xlsx':'#0F6E56','xls':'#0F6E56','pdf':'#e74c3c','doc':'#185FA5','docx':'#185FA5',
+  'csv':'#0F6E56','zip':'#BA7517','rar':'#BA7517'
+};
+
+function promptSampleLink(btn){
+  var url = prompt('Nhập URL file mẫu (Google Drive, OneDrive, Dropbox, v.v.):');
+  if(!url||!url.trim()) return false;
+  url = url.trim();
+  // detect ext from url
+  var ext = (url.split('.').pop().split('?')[0]||'').toLowerCase();
+  var icon = sfIconMap[ext] || 'ti-file';
+  var color = sfColorMap[ext] || 'var(--brand)';
+  // determine label from ext
+  var labels = {'xlsx':'Excel','xls':'Excel','pdf':'PDF','doc':'Word','docx':'Word','csv':'CSV','zip':'ZIP','rar':'RAR'};
+  var label = labels[ext] ? 'File ' + labels[ext] + ' mẫu' : 'File kết quả mẫu';
+  var item = btn.closest('.sample-file-item');
+  item.querySelector('.sf-name').textContent = label;
+  item.querySelector('.sf-link').href = url;
+  item.querySelector('.sf-link').target = '_blank';
+  item.querySelector('.sf-link').innerHTML = '<i class="ti ti-external-link" style="font-size:13px"></i> Xem mẫu';
+  item.querySelector('.sf-link').onclick = null;
+  item.querySelector('i:first-child').className = 'ti ' + icon;
+  item.querySelector('i:first-child').style.color = color;
+  return false;
+}
+
+function addSampleFile(idx){
+  var list = document.getElementById('sampleFiles-' + idx);
+  var div = document.createElement('div');
+  div.className = 'sample-file-item';
+  div.innerHTML = '<i class="ti ti-file" style="color:var(--brand)"></i>'
+    + '<span class="sf-name">File mẫu mới</span>'
+    + '<a href="#" class="sf-link" onclick="return promptSampleLink(this)"><i class="ti ti-link" style="font-size:13px"></i> Gắn link</a>'
+    + '<button class="del-sample" onclick="this.closest(\'.sample-file-item\').remove()">×</button>';
+  list.appendChild(div);
+}
+
+// ── EDIT MODE ──
+var ED=false;
+var SELS=['.hero h1','.hero p','.hero-badge','.section-header h2','.section-header p',
+  '.prod-name','.prod-desc','.prod-price','.stat-num','.stat-label',
+  '.plan-name','.plan-price','.plan-desc','.plan-features li','.plan-badge',
+  '.feat-text','.review-text','.reviewer-name','.reviewer-role',
+  '.cta-section h2','.cta-section p',
+  '.footer-copy','.trust-item span','.cat-card span',
+  '.video-item','.detail-header h3','.prod-type','footer .footer-links a',
+  '.step-title','.step-desc','.buy-contact p'];
+
+function toggleEdit(){
+  ED=!ED;
+  var t=document.getElementById('etoggle');
+  var l=document.getElementById('elabel');
+  var s=document.getElementById('esave');
+  var h=document.getElementById('editHint');
+  if(ED){
+    t.textContent='🔒 Tắt chỉnh sửa';t.className='etoggle on';
+    l.textContent='Đang chỉnh sửa';s.style.display='block';
+    document.body.classList.add('editing');
+    h.classList.add('show');setTimeout(function(){h.classList.remove('show');},3500);
+    SELS.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(el){
+        if(!el.closest('.edit-bar')&&!el.closest('.edit-hint'))
+          el.setAttribute('contenteditable','true');
+      });
+    });
+  } else {
+    t.textContent='✏️ Bật chỉnh sửa';t.className='etoggle off';
+    l.textContent='Chế độ xem';s.style.display='none';
+    document.body.classList.remove('editing');
+    document.querySelectorAll('[contenteditable]').forEach(function(el){
+      el.removeAttribute('contenteditable');
+    });
+  }
+}
+
+function delProd(btn){
+  if(confirm('Xóa sản phẩm này?'))btn.closest('.prod-card').remove();
+}
+
+var prodCounter=10;
+function addProd(type){
+  var g=document.getElementById(type==='vba'?'vbaGrid':'exeGrid');
+  var c=document.createElement('div');
+  c.className='prod-card';
+  c.setAttribute('data-type',type);
+  c.setAttribute('data-product',prodCounter);
+  c.style.cursor='pointer';
+  var iconClass=type==='vba'?'green':'blue';
+  var icon=type==='vba'?'ti-file-spreadsheet':'ti-device-desktop';
+  var iconColor=type==='vba'?'#0F6E56':'#185FA5';
+  var typeClass=type==='vba'?'type-vba':'type-exe';
+  var typeLabel=type==='vba'?'Excel VBA':'File EXE';
+  c.innerHTML='<button class="del-prod" onclick="event.stopPropagation();delProd(this)">×</button>'
+    +'<div class="prod-row-icon '+iconClass+'"><i class="ti '+icon+'" style="color:'+iconColor+'"></i></div>'
+    +'<div class="prod-body">'
+    +'<div class="prod-body-left"><span class="prod-type '+typeClass+'">'+typeLabel+'</span>'
+    +'<div class="prod-name">Tên sản phẩm mới</div></div>'
+    +'<div class="prod-footer"><span class="prod-price">299.000 ₫</span>'
+    +'<span class="prod-stars"><i class="ti ti-star-filled"></i> 5.0</span></div>'
+    +'</div><i class="ti ti-chevron-right prod-btn-arrow"></i>';
+  g.appendChild(c);
+  prodCounter++;
+}
+
+// ── BACKUP & RESTORE ──
+var BACKUP_KEY = 'codeshop_backups';
+var MAX_BACKUPS = 10;
+
+function getBackups(){
+  try{ return JSON.parse(localStorage.getItem(BACKUP_KEY)||'[]'); }catch(e){ return []; }
+}
+
+function saveBackups(arr){
+  try{ localStorage.setItem(BACKUP_KEY, JSON.stringify(arr)); }catch(e){}
+}
+
+function captureHTML(){
+  // Temporarily remove contenteditable attrs for clean snapshot
+  var ces = document.querySelectorAll('[contenteditable]');
+  ces.forEach(function(el){ el.removeAttribute('contenteditable'); });
+  var html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  ces.forEach(function(el){ el.setAttribute('contenteditable','true'); });
+  return html;
+}
+
+function createBackup(silent){
+  var backups = getBackups();
+  var now = new Date();
+  var label = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN', {hour:'2-digit',minute:'2-digit'});
+  backups.unshift({ ts: now.getTime(), label: label, html: captureHTML() });
+  if(backups.length > MAX_BACKUPS) backups = backups.slice(0, MAX_BACKUPS);
+  saveBackups(backups);
+  renderBackupList();
+  if(!silent){
+    showToast('✅ Đã backup lúc ' + label);
+  }
+}
+
+function restoreBackup(ts){
+  var backups = getBackups();
+  var bk = backups.find(function(b){ return b.ts === ts; });
+  if(!bk) return;
+  if(!confirm('Khôi phục backup này? Trang sẽ tải lại với dữ liệu đã lưu.')) return;
+  // Store the html to restore, then load it
+  localStorage.setItem('codeshop_restore', bk.html);
+  location.reload();
+}
+
+function deleteBackup(ts){
+  var backups = getBackups().filter(function(b){ return b.ts !== ts; });
+  saveBackups(backups);
+  renderBackupList();
+}
+
+function renderBackupList(){
+  var list = document.getElementById('backupList');
+  var empty = document.getElementById('backupEmpty');
+  var backups = getBackups();
+  // Clear existing items (keep empty msg)
+  var items = list.querySelectorAll('.bk-item');
+  items.forEach(function(el){ el.remove(); });
+  if(backups.length === 0){
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  backups.forEach(function(bk, idx){
+    var div = document.createElement('div');
+    div.className = 'bk-item';
+    div.style.cssText = 'display:flex;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid var(--border);font-size:13px';
+    div.innerHTML = '<span style="flex:1;color:var(--text)">'
+      + (idx===0 ? '<span style="font-size:10px;background:var(--brand-light);color:var(--brand-dark);padding:1px 7px;border-radius:8px;font-weight:600;margin-right:6px">Mới nhất</span>' : '')
+      + bk.label + '</span>'
+      + '<button onclick="restoreBackup(' + bk.ts + ')" style="padding:4px 10px;background:var(--accent-light);color:#0C447C;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">Khôi phục</button>'
+      + '<button onclick="downloadBackup(' + bk.ts + ')" style="padding:4px 8px;background:var(--brand-light);color:var(--brand-dark);border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit" title="Tải xuống">⬇</button>'
+      + '<button onclick="deleteBackup(' + bk.ts + ')" style="padding:4px 8px;background:#fef2f2;color:#e74c3c;border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit" title="Xoá">✕</button>';
+    list.appendChild(div);
+  });
+}
+
+function downloadBackup(ts){
+  var backups = getBackups();
+  var bk = backups.find(function(b){ return b.ts === ts; });
+  if(!bk) return;
+  var blob = new Blob([bk.html], {type:'text/html;charset=utf-8'});
+  var a = document.createElement('a');
+  var d = new Date(ts);
+  a.href = URL.createObjectURL(blob);
+  a.download = 'codeshop-backup-' + d.toISOString().slice(0,16).replace(/[T:]/g,'-') + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+function toggleBackupPanel(){
+  var p = document.getElementById('backupPanel');
+  if(p.style.display === 'none'){
+    renderBackupList();
+    p.style.display = 'block';
+  } else {
+    p.style.display = 'none';
+  }
+}
+
+function showToast(msg){
+  var h = document.getElementById('editHint');
+  var prev = h.textContent;
+  h.textContent = msg;
+  h.classList.add('show');
+  setTimeout(function(){ h.classList.remove('show'); h.textContent = prev; }, 2500);
+}
+
+// On load: check if there's a pending restore
+(function(){
+  var restore = localStorage.getItem('codeshop_restore');
+  if(restore){
+    localStorage.removeItem('codeshop_restore');
+    // Write the restored HTML
+    document.open(); document.write(restore); document.close();
+  }
+})();
+
+function savePage(){
+  createBackup(true); // auto-backup silently before download
+  var bar=document.getElementById('editBar');
+  var hint=document.getElementById('editHint');
+  document.querySelectorAll('[contenteditable]').forEach(function(el){el.removeAttribute('contenteditable');});
+  document.body.classList.remove('editing');
+  bar.style.display='none';hint.style.display='none';
+  var html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  var blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='codeshop-vn.html';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(function(){
+    bar.style.display='flex';hint.style.display='';
+    ED=false;
+    document.getElementById('etoggle').textContent='✏️ Bật chỉnh sửa';
+    document.getElementById('etoggle').className='etoggle off';
+    document.getElementById('elabel').textContent='Chế độ xem';
+    document.getElementById('esave').style.display='none';
+  },600);
+}
+
+// ── NAVIGATE TO PRODUCT DETAIL ──
+function goToDetail(idx){
+  var tabs=document.querySelectorAll('.detail-tab');
+  var panels=document.querySelectorAll('.detail-panel');
+  tabs.forEach(function(t){t.classList.remove('active');});
+  panels.forEach(function(p){p.classList.remove('active');});
+  if(tabs[idx]) tabs[idx].classList.add('active');
+  var panel=document.getElementById('detail-'+idx);
+  if(panel) panel.classList.add('active');
+  var demoSection=document.getElementById('demo');
+  if(demoSection) demoSection.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function switchDetail(idx,btn){
+  var tabs=document.querySelectorAll('.detail-tab');
+  var panels=document.querySelectorAll('.detail-panel');
+  tabs.forEach(function(t){t.classList.remove('active');});
+  panels.forEach(function(p){p.classList.remove('active');});
+  btn.classList.add('active');
+  var panel=document.getElementById('detail-'+idx);
+  if(panel) panel.classList.add('active');
+}
+
+// ── CATEGORY FILTER ──
+function filterProducts(type, card){
+  document.querySelectorAll('.cat-card').forEach(function(c){c.classList.remove('active');});
+  card.classList.add('active');
+  // Just scroll to relevant column
+  var col=document.getElementById(type+'Grid');
+  if(col) col.closest('.prod-col-wrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── VIDEO UPLOAD ──
+function uploadVideo(idx, input){
+  if(!input.files||!input.files[0]) return;
+  var file=input.files[0];
+  var url=URL.createObjectURL(file);
+  var area=document.getElementById('videoArea-'+idx);
+  area.innerHTML='<div class="video-preview">'
+    +'<video src="'+url+'" controls></video>'
+    +'<button class="remove-video" onclick="removeVideo('+idx+')">×</button>'
+    +'</div>'
+    +'<input type="file" style="display:none" id="videoInput-'+idx+'" accept="video/*" onchange="uploadVideo('+idx+',this)">';
+}
+
+function removeVideo(idx){
+  var area=document.getElementById('videoArea-'+idx);
+  area.innerHTML='<div class="video-placeholder" onclick="document.getElementById(\'videoInput-'+idx+'\').click()">'
+    +'<div class="play-btn"><i class="ti ti-player-play"></i></div></div>'
+    +'<input type="file" style="display:none" id="videoInput-'+idx+'" accept="video/*" onchange="uploadVideo('+idx+',this)">';
+}
+
+// ── FEATURES ──
+function addFeature(listId){
+  var text=prompt('Nhập tính năng mới:');
+  if(!text||!text.trim()) return;
+  var ul=document.getElementById(listId);
+  var li=document.createElement('li');
+  li.innerHTML='<i class="ti ti-check"></i><span class="feat-text">'+text.trim()+'</span><button class="del-feature" onclick="delFeature(this)">×</button>';
+  ul.appendChild(li);
+}
+
+function delFeature(btn){
+  if(confirm('Xóa tính năng này?')) btn.closest('li').remove();
+}
+
+// ── PRICING EXPAND ──
+function expandPlan(card){
+  var scroll=document.getElementById('pricingScroll');
+  var plans=scroll.querySelectorAll('.plan');
+  plans.forEach(function(p){p.classList.remove('expanded');});
+  card.classList.add('expanded');
+  // scroll card to center
+  var scrollLeft=card.offsetLeft - scroll.offsetWidth/2 + card.offsetWidth/2;
+  scroll.scrollTo({left:scrollLeft,behavior:'smooth'});
+}
+</script>
+
+
+</body></html>
